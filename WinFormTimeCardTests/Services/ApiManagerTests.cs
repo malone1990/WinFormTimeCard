@@ -10,7 +10,7 @@ namespace WinFormTimeCard.Services.Tests
     [TestClass()]
     public class ApiManagerTests
     {
-        ApiManager apiManager = ApiManager.GetManager();
+        ITimeCardRepo apiManager = ApiManager.GetManager();
 
         [TestMethod()]
         public void LoginByNameAndPwdTest()
@@ -40,7 +40,7 @@ namespace WinFormTimeCard.Services.Tests
         [TestMethod()]
         public void DeleteByUserIdsTest()
         {
-            int[] userIds = new int[] { 1007, };
+            int[] userIds = new int[] { 1, 2};
             var result = apiManager.DeleteByUserIds(userIds);
             Assert.IsTrue(result);
         }

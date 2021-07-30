@@ -9,7 +9,7 @@ namespace WinFormTimeCard
 {
     public class Common
     {
-        public static ApiManager apiManager = ApiManager.GetManager();
+        public static ITimeCardRepo apiManager = null; 
 
         public static UserInfo CurrentUser = null;
 

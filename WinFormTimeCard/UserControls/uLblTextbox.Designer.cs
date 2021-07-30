@@ -38,7 +38,7 @@ namespace WinFormTimeCard.UserControls
             // 
             this.txtNumber.Location = new System.Drawing.Point(3, 104);
             this.txtNumber.Name = "txtNumber";
-            this.txtNumber.Size = new System.Drawing.Size(100, 39);
+            this.txtNumber.Size = new System.Drawing.Size(98, 39);
             this.txtNumber.TabIndex = 0;
             this.txtNumber.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtNumber.TextChanged += new System.EventHandler(this.txtNumber_TextChanged);

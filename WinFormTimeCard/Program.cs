@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WinFormTimeCard.Services;
 
 namespace WinFormTimeCard
 {
@@ -17,12 +18,16 @@ namespace WinFormTimeCard
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //fmLogin frmLogin = new fmLogin();
-            //if (frmLogin.ShowDialog() == DialogResult.OK)
-            //{
-            //    frmLogin.Close();
+
+            //Common.apiManager = ApiManager.GetManager();
+            Common.apiManager = MockTimeCardRepo.GetManager();
+
+            fmLogin frmLogin = new fmLogin();
+            if (frmLogin.ShowDialog() == DialogResult.OK)
+            {
+                frmLogin.Close();
                 Application.Run(new fmTimeCardMain());
-            //}
+            }
         }
     }
 }

@@ -12,6 +12,9 @@ namespace WinFormTimeCard.UserControls
 {
     public partial class UCTimeCard : UserControl
     {
+        public delegate void DelegateRemoveItemSelf(Control ctl);
+        public event DelegateRemoveItemSelf EventRemoveItemSelf = null;
+
         private uLblTextbox[] ctlWeeks = new uLblTextbox[7];
         public UCTimeCard()
         {
@@ -69,12 +72,23 @@ namespace WinFormTimeCard.UserControls
             for(int i = 0; i< ctlWeeks.Length;i++)
             {
                 ctlWeeks[i].UpdateNumber += UpdateTimecardTimes;
-                ctlWeeks[i].InitUCInfo(tuples[i].Item1, tuples[i].Item2.ToString("MMM dd",CultureInfo.CreateSpecificCulture("en-GB")), tuples[i].Item3);
+                ctlWeeks[i].InitUCInfo(tuples[i].Item1, tuples[i].Item2.ToString("MMM dd",CultureInfo.CreateSpecificCulture("en-GB")), tuples[i].Item3
+                    , DateTime.Now.Date.Equals(tuples[i].Item2.Date));
             }
 
             this.lblTotal.Text = string.Format("{0} Hours", timeCard.Count);
         }
 
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            //if (EventRemoveItemSelf != null)
+                EventRemoveItemSelf?.Invoke(this);
+        }
 
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            Array.ForEach(ctlWeeks, ctl => ctl.ClearText());
+            this.lblTotal.Text = "0 Hours";
+        }
     }
 }

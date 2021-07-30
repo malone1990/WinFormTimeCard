@@ -11,7 +11,7 @@ using System.Net.Http.Headers;
 
 namespace WinFormTimeCard.Services
 {
-    public class ApiManager
+    public class ApiManager : ITimeCardRepo
     {
         private ApiManager() { }
 

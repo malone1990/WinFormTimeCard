@@ -21,9 +21,7 @@ namespace WinFormTimeCard
         {
             InitializeComponent();
 
-            this.CreateMthCWeek();
-            //pnlWeek.LostFocus += PnlWeek_LostFocus;
-            //pnlWeek.MouseClick += PnlWeek_MouseClick;
+            this.CreateMthCWeek();         
         }
 
         private void PnlHead_MouseClick(object sender, MouseEventArgs e)
@@ -72,10 +70,10 @@ namespace WinFormTimeCard
                 }
                 this.FreshUsersList();
 
-                TimeEntries = Common.apiManager.GetTimeEntriesByUserId(Common.CurrentUserId);   
+                this.TimeEntries = Common.apiManager.GetTimeEntriesByUserId(Common.CurrentUserId);   
             }
 
-            tpMain.TabPages.Remove(tabUsers);
+            //tpMain.TabPages.Remove(tabUsers);
 
             UpdateSelectWeekByDate(DateTime.Now);
         }
@@ -83,6 +81,8 @@ namespace WinFormTimeCard
         #region Users' Operation  
         private void FreshUsersList()
         {
+            //lstvUsers.BindingContext = 
+
             lstvUsers.Items.Clear();
             List<UserInfo> users = Common.apiManager.GetAllUsers();
             if (users != null && users.Count > 0)
@@ -187,9 +187,9 @@ namespace WinFormTimeCard
             lblWeekRange.Text = string.Format("{0}-{1}", mon.ToString("MM/dd/yyyy"), sun.ToString("MM/dd/yyyy"));
             mthCWeek.SetSelectionRange(mon, sun);
 
-            if (TimeEntries != null && TimeEntries.Exists(t => t.DateFrom.Subtract(mon).Days == 0 && t.DateTo.Subtract(sun).Days == 0))
+            if (TimeEntries != null && TimeEntries.Exists(t => t.DateFrom.Date.Equals(mon.Date) && t.DateTo.Date.Equals(sun.Date)))
             {
-                CurrentTimeEntry = TimeEntries.Find(t => t.DateFrom.Subtract(mon).Days == 0 && t.DateTo.Subtract(sun).Days == 0);
+                CurrentTimeEntry = TimeEntries.Find(t => t.DateFrom.Date.Equals(mon.Date) && t.DateTo.Date.Equals(sun.Date));
                 lblGlobalHours.Text = string.Format("Total {0} hrs", CurrentTimeEntry.TotalHours);
 
             }
@@ -210,6 +210,7 @@ namespace WinFormTimeCard
             //ucTimeCard1.SetCombBoxProjects(new string[] { "1", "2" });
             ucTimeCard1.SetCombBoxProjects(Common.ProjectTypes, 0);
 
+            ucTimeCard1.EventRemoveItemSelf += UcTimeCard1_EventRemoveItemSelf;
             ucTimeCard1.InitInfo(mon, new TimeCardInfo() { MonInfo = 1, WedInfo = 3.6 });
             //ucTimeCard1.Width = pnlTimeCards.Width - 2;
             ucTimeCard1.Dock = DockStyle.Top;
@@ -218,6 +219,12 @@ namespace WinFormTimeCard
             this.pnlTimeCards.Controls.SetChildIndex(ucTimeCard1, 0);
             
             //this.ucTimeCard1.SetCombBoxProjects(new string[] { "1","2"});
+        }
+
+        private void UcTimeCard1_EventRemoveItemSelf(Control ctl)
+        {
+            ctl.Parent.Controls.Remove(ctl);
+            ctl.Dispose();          
         }
 
         private void CreateNewCard(DateTime mon, int selectedProType)
